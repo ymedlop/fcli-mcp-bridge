@@ -67,9 +67,6 @@ COPY --from=builder /opt/supergateway /opt/supergateway
 COPY --from=builder /usr/local/bin/supergateway /usr/local/bin/supergateway
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
-# Fix permissions
-RUN chown node:node /usr/local/bin/fcli.sh /usr/local/bin/start-bridge.sh
-
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:${MCP_PORT}/health || exit 1
