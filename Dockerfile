@@ -1,5 +1,4 @@
-# Stage 1: Build dependencies and downloaded artifacts
-FROM alpine:3.23 AS builder
+FROM node:26-alpine3.23
 
 RUN apk add --no-cache \
     openjdk21-jre \
@@ -44,31 +43,6 @@ COPY start-bridge.sh /usr/local/bin/start-bridge.sh
 RUN sed -i 's/\r$//' /usr/local/bin/start-bridge.sh \
     && printf '#!/bin/sh\nexec java -jar /opt/fortify/fcli.jar "$@"\n' > /usr/local/bin/fcli.sh \
     && chmod +x /usr/local/bin/fcli.sh /usr/local/bin/start-bridge.sh
-
-
-# Stage 2: Runtime
-FROM node:26-alpine3.23
-
-RUN apk add --no-cache \
-    openjdk21-jre \
-    curl \
-    ca-certificates
-
-ENV FORTIFY_DATA_DIR=/fcli-data
-ENV FCLI_MCP_MODULE=ssc
-ENV MCP_PORT=8000
-ENV MCP_BASE_URL=http://fortify-mcp-bridge:8000
-
-LABEL maintainer="ymedlop"
-LABEL description="Fortify CLI MCP Bridge"
-
-COPY --from=builder /usr/local/bin/start-bridge.sh /usr/local/bin/start-bridge.sh
-COPY --from=builder /usr/local/bin/fcli.sh /usr/local/bin/fcli.sh
-COPY --from=builder /opt/fortify /opt/fortify
-COPY --from=builder /opt/supergateway /opt/supergateway
-COPY --from=builder /usr/local/bin/supergateway /usr/local/bin/supergateway
-
-RUN chmod +x /usr/local/bin/start-bridge.sh /usr/local/bin/fcli.sh
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f "http://localhost:${MCP_PORT}/healthz" || exit 1
