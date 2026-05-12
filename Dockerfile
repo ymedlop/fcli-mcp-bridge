@@ -30,8 +30,8 @@ RUN mkdir -p /opt/supergateway \
 # Download Fortify CLI with retry logic
 RUN mkdir -p /opt/fortify
 RUN set -e; \
-    for i in 1 2 3; do \
-      if curl -fL https://github.com/fortify/fcli/releases/download/v${FCLI_VERSION}/fcli-${FCLI_VERSION}.jar -o /opt/fortify/fcli.jar; then \
+    for i in 1 2 3; do \ 
+      if curl -fL https://github.com/fortify/fcli/releases/download/v${FCLI_VERSION}/fcli.jar -o /opt/fortify/fcli.jar; then \
         break; \
       elif [ $i -lt 3 ]; then \
         echo "Download attempt $i failed, retrying in 10s..."; \
