@@ -1,5 +1,8 @@
 name: ci-release
 
+permissions:
+  contents: read
+
 on:
   push:
     tags:
