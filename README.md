@@ -298,33 +298,6 @@ Recommended controls:
 
 ## Troubleshooting
 
-### `exec /usr/local/bin/start-bridge.sh: no such file or directory`
-
-This usually means the runtime image cannot execute the script, even if the file exists. Common causes:
-
-- The runtime image does not contain `/bin/sh`.
-- The script has Windows CRLF line endings.
-- The shebang points to an interpreter that is not present in the image.
-
-Fixes:
-
-- Use a runtime image that includes `/bin/sh`, or replace the shell script with a real executable entrypoint.
-- Normalize the script during the image build:
-
-  ```dockerfile
-  RUN sed -i 's/\r$//' /usr/local/bin/start-bridge.sh
-  ```
-
-### `java: not found`
-
-The fcli wrapper runs:
-
-```sh
-java -jar /opt/fortify/fcli.jar
-```
-
-Make sure the final runtime image includes a Java runtime, not only the builder stage.
-
 ### Health check fails
 
 Check that:
