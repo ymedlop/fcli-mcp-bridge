@@ -1,3 +1,6 @@
+[![](https://images.microbadger.com/badges/version/ymedlop/fcli-mcp-bridge.svg)](https://microbadger.com/images/ymedlop/fcli-mcp-bridge "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/ymedlop/fcli-mcp-bridge.svg)](https://microbadger.com/images/ymedlop/fcli-mcp-bridge "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/commit/ymedlop/fcli-mcp-bridge.svg)](https://microbadger.com/images/ymedlop/fcli-mcp-bridge "Get your own commit badge on microbadger.com") [![](https://images.microbadger.com/badges/license/ymedlop/fcli-mcp-bridge.svg)](https://microbadger.com/images/ymedlop/fcli-mcp-bridge "Get your own license badge on microbadger.com")
+[![](https://img.shields.io/docker/pulls/ymedlop/fcli-mcp-bridge.svg)](https://img.shields.io/docker/pulls/ymedlop/fcli-mcp-bridge.svg)
+
 # Fortify fcli MCP Bridge
 
 Expose Fortify CLI (`fcli`) as a remote Model Context Protocol (MCP) service by running the fcli stdio MCP server behind Supergateway.
