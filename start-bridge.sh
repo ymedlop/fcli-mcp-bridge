@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 set -eu
 
 export FORTIFY_DATA_DIR="${FORTIFY_DATA_DIR:-/fcli-data}"
