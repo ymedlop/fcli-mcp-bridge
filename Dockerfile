@@ -1,5 +1,7 @@
 FROM node:lts-trixie
 
+ARG FCLI_VERSION=3.19.0
+
 USER root
 
 RUN apt-get update \
@@ -20,7 +22,7 @@ RUN apt-get update \
     && npm install --omit=dev \
     && ln -s /opt/supergateway/node_modules/.bin/supergateway /usr/local/bin/supergateway
 
-COPY vendor/fcli.jar /opt/fortify/fcli.jar
+RUN curl -L https://github.com/fortify/fcli/releases/download/v${FCLI_VERSION}/fcli-${FCLI_VERSION}.jar -o /opt/fortify/fcli.jar
 
 RUN printf '#!/usr/bin/env sh\nexec java -jar /opt/fortify/fcli.jar "$@"\n' > /usr/local/bin/fcli.sh \
     && chmod +x /usr/local/bin/fcli.sh
