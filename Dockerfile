@@ -1,5 +1,5 @@
 # Stage 1: Build dependencies, system packages, scripts
-FROM alpine:3.23 as builder
+FROM alpine:3.23 AS builder
 
 # Install system dependencies
 RUN apk add --no-cache \
