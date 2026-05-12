@@ -59,9 +59,6 @@ ENV MCP_BASE_URL=http://fortify-mcp-bridge:8000
 LABEL maintainer="ymedlop"
 LABEL description="Fortify CLI MCP Bridge"
 
-# Create directories
-RUN mkdir -p /opt/fortify /opt/supergateway /fcli-data
-
 # Copy built files and dependencies from builder
 COPY --from=builder /usr/local/bin/start-bridge.sh /usr/local/bin/start-bridge.sh
 COPY --from=builder /usr/local/bin/fcli.sh /usr/local/bin/fcli.sh
