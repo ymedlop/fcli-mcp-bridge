@@ -77,8 +77,5 @@ RUN chown node:node /usr/local/bin/fcli.sh /usr/local/bin/start-bridge.sh
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:${MCP_PORT}/health || exit 1
 
-# Switch to non-root user
-USER node
-
 # Entrypoint
 ENTRYPOINT ["/usr/local/bin/start-bridge.sh"]
