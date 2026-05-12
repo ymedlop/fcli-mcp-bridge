@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.20
+FROM dhi.io/node:26-alpine3.23
 
 # Build arguments for version pinning
 ARG FCLI_VERSION=3.19.0
