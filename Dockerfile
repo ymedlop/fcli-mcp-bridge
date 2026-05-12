@@ -14,6 +14,18 @@ WORKDIR /opt
 
 # Build arguments for version pinning
 ARG FCLI_VERSION=3.19.0
+ARG SUPERGATEWAY_VERSION=3.4.3
+ARG MCP_SDK_VERSION=1.19.1
+
+# Set up SuperGateway with pinned MCP SDK version
+RUN mkdir -p /opt/supergateway \
+    && cd /opt/supergateway \
+    && npm init -y \
+    && npm pkg set dependencies.supergateway="${SUPERGATEWAY_VERSION}" \
+    && npm pkg set overrides.@modelcontextprotocol/sdk="${MCP_SDK_VERSION}" \
+    && npm install --omit=dev \
+    && ln -s /opt/supergateway/node_modules/.bin/supergateway /usr/local/bin/supergateway \
+    && npm cache clean --force
 
 # Download Fortify CLI with retry logic
 RUN mkdir -p /opt/fortify
@@ -38,10 +50,6 @@ RUN printf '#!/usr/bin/env sh\nexec java -jar /opt/fortify/fcli.jar "$@"\n' > /u
 # Stage 2: Use hardened base image, copy built artifacts and scripts
 FROM dhi.io/node:26-alpine3.23
 
-# Build arguments for version pinning
-ARG SUPERGATEWAY_VERSION=3.4.3
-ARG MCP_SDK_VERSION=1.19.1
-
 # Environment
 ENV FORTIFY_DATA_DIR=/fcli-data
 ENV FCLI_MCP_MODULE=ssc
@@ -53,16 +61,6 @@ LABEL description="Fortify CLI MCP Bridge"
 
 USER root
 
-# Set up SuperGateway with pinned MCP SDK version
-RUN mkdir -p /opt/supergateway \
-    && cd /opt/supergateway \
-    && npm init -y \
-    && npm pkg set dependencies.supergateway="${SUPERGATEWAY_VERSION}" \
-    && npm pkg set overrides.@modelcontextprotocol/sdk="${MCP_SDK_VERSION}" \
-    && npm install --omit=dev \
-    && ln -s /opt/supergateway/node_modules/.bin/supergateway /usr/local/bin/supergateway \
-    && npm cache clean --force
-
 # Create directories
 RUN mkdir -p /opt/fortify /opt/supergateway /fcli-data && chown -R node:node /opt/fortify /opt/supergateway /fcli-data
 
@@ -70,6 +68,8 @@ RUN mkdir -p /opt/fortify /opt/supergateway /fcli-data && chown -R node:node /op
 COPY --from=builder /usr/local/bin/start-bridge.sh /usr/local/bin/start-bridge.sh
 COPY --from=builder /usr/local/bin/fcli.sh /usr/local/bin/fcli.sh
 COPY --from=builder /opt/fortify /opt/fortify
+COPY --from=builder /opt/supergateway /opt/supergateway
+COPY --from=builder /usr/local/bin/supergateway /usr/local/bin/supergateway
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 # Fix permissions
